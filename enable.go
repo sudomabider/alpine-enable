@@ -46,7 +46,7 @@ func do(c *cli.Context) error {
 
 	cmdStr := deps.Expand()
 
-	fmt.Println("Running: " + cmdStr)
+	fmt.Println("Command: " + cmdStr)
 	if c.Bool("dry") {
 		return nil
 	}
@@ -57,22 +57,6 @@ func do(c *cli.Context) error {
 	}
 
 	return nil
-}
-
-func parseArgs() []string {
-	args := make([]string, 0)
-
-	for _, arg := range os.Args[1:] {
-		if !strings.HasPrefix(arg, "-") {
-			args = append(args, arg)
-		}
-	}
-
-	return args
-}
-
-func help() {
-	fmt.Print("This is help")
 }
 
 func execCmd(cmdStr string) error {
