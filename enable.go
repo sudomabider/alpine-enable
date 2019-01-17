@@ -2,41 +2,61 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/urfave/cli"
 )
 
 func main() {
-	args := parseArgs()
+	app := cli.NewApp()
+	app.Name = "Alpine enable"
+	app.Usage = fmt.Sprintf("easily enable [%s]", strings.Join(SupportedModules(), ","))
+	app.Version = "0.0.0"
+	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:   "dry, d",
+			Hidden: false,
+			Usage:  "print the full command but not execute",
+		},
+	}
+	app.HideHelp = true
+	app.Action = do
 
-	dryRun := flag.Bool("dry", false, "Print the command but not execute")
-	flag.Parse()
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
+func do(c *cli.Context) error {
+	args := c.Args()
 	if len(args) == 0 {
-		help()
-		return
+		cli.ShowAppHelp(c)
+		return nil
 	}
 
 	deps, err := ParseDeps(args)
 	if err != nil {
-		fmt.Println(err.Error())
-		return
+		return err
 	}
 
 	cmdStr := deps.Expand()
 
 	fmt.Println("Running: " + cmdStr)
-	if *dryRun {
-		return
+	if c.Bool("dry") {
+		return nil
 	}
 
 	err = execCmd(cmdStr)
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
+
+	return nil
 }
 
 func parseArgs() []string {
