@@ -51,7 +51,7 @@ var reqs = map[string]Dep{
 type Deps map[string]Dep
 
 func (ds Deps) Expand() string {
-	var sys, php, build, pecl []string
+	var sys, php, build, pecl, npm []string
 
 	for _, d := range ds {
 		if d.sys != "" {
@@ -66,10 +66,13 @@ func (ds Deps) Expand() string {
 		if d.pecl != "" {
 			pecl = append(pecl, d.pecl)
 		}
+		if d.npm != "" {
+			npm = append(npm, d.npm)
+		}
 	}
 
 	var cmd []string
-	var sysCmd, phpCmd, buildCmd, peclCmd string
+	var sysCmd, phpCmd, buildCmd, peclCmd, npmCmd string
 
 	if len(sys) > 0 {
 		sysCmd = "apk add --no-cache " + strings.Join(sys, " ")
@@ -89,6 +92,11 @@ func (ds Deps) Expand() string {
 	if len(php) > 0 {
 		phpCmd = "docker-php-ext-install " + strings.Join(php, " ")
 		cmd = append(cmd, phpCmd)
+	}
+
+	if len(npm) > 0 {
+		npmCmd = "npm i -g " + strings.Join(npm, " ")
+		cmd = append(cmd, npmCmd)
 	}
 
 	if len(build) > 0 {
