@@ -11,8 +11,14 @@ import (
 
 func main() {
 	args := parseArgs()
+
 	dryRun := flag.Bool("dry", false, "Print the command but not execute")
 	flag.Parse()
+
+	if len(args) == 0 {
+		help()
+		return
+	}
 
 	deps, err := ParseDeps(args)
 	if err != nil {
@@ -40,11 +46,6 @@ func parseArgs() []string {
 		if !strings.HasPrefix(arg, "-") {
 			args = append(args, arg)
 		}
-	}
-
-	if len(args) == 0 {
-		help()
-		return make([]string, 0)
 	}
 
 	return args

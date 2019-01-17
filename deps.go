@@ -112,3 +112,11 @@ func ParseDeps(vs []string) (Deps, error) {
 
 	return deps, nil
 }
+
+func SupportedModules() []string {
+	keys := make([]string, 0, len(reqs))
+	for k := range reqs {
+		keys = append(keys, k)
+	}
+	return keys
+}
