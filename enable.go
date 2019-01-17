@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bytes"
+	"bufio"
 	"flag"
 	"fmt"
 	"os"
@@ -22,19 +22,37 @@ func main() {
 
 	cmdStr := deps.Expand()
 
+	fmt.Println("Running: " + cmdStr)
 	if *dryRun {
-		fmt.Println(cmdStr)
 		return
 	}
 
-	cmd := exec.Command("/bin/sh", "-c", cmdStr)
-	cmdOutput := &bytes.Buffer{}
-	cmd.Stdout = cmdOutput
-	err = cmd.Run()
+	cmd := exec.Command("sh", "-c", cmdStr)
+
+	cmdReader, err := cmd.StdoutPipe()
 	if err != nil {
-		os.Stderr.WriteString(err.Error())
+		fmt.Fprintln(os.Stderr, "Error creating StdoutPipe for Cmd", err)
+		os.Exit(1)
 	}
-	fmt.Print(string(cmdOutput.Bytes()))
+
+	scanner := bufio.NewScanner(cmdReader)
+	go func() {
+		for scanner.Scan() {
+			fmt.Printf("output | %s\n", scanner.Text())
+		}
+	}()
+
+	err = cmd.Start()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error starting Cmd", err)
+		os.Exit(1)
+	}
+
+	err = cmd.Wait()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error waiting for Cmd", err)
+		os.Exit(1)
+	}
 }
 
 func parseArgs() []string {
