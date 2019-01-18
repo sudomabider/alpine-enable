@@ -2,34 +2,38 @@ package main
 
 var reqs = map[string]Dep{
 	"git": Dep{
-		sys: "git openssh-client",
+		sys: []string{"git", "openssh-client"},
 	},
 	"crux": Dep{
-		php: "bcmath sockets",
+		php: []string{"bcmath", "sockets"},
 	},
 	"soap": Dep{
-		sys: "libxml2-dev",
-		php: "soap",
+		sys: []string{"libxml2-dev"},
+		php: []string{"soap"},
 	},
 	"zip": Dep{
-		sys: "zlib-dev libzip-dev",
-		php: "zip",
+		sys: []string{"zlib-dev libzip-dev"},
+		php: []string{"zip"},
 	},
 	"mysql": Dep{
-		sys: "mysql-client",
-		php: "pdo_mysql",
+		sys: []string{"mysql-client"},
+		php: []string{"pdo_mysql"},
 	},
 	"postgres": Dep{
-		sys: "postgresql-dev",
-		php: "pdo_pgsql",
+		sys: []string{"postgresql-dev"},
+		php: []string{"pdo_pgsql"},
 	},
 	"swoole": Dep{
-		build: "$PHPIZE_DEPS",
-		pecl:  "swoole",
+		build: []string{"$PHPIZE_DEPS"},
+		pecl:  []string{"swoole"},
+	},
+	"xdebug": Dep{
+		build: []string{"$PHPIZE_DEPS"},
+		pecl:  []string{"xdebug"},
 	},
 	"pm2": Dep{
-		sys: "nodejs",
-		npm: "pm2",
+		sys: []string{"nodejs"},
+		npm: []string{"pm2"},
 	},
 }
 

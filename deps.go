@@ -7,11 +7,11 @@ import (
 
 // Dep holds all dependency information for a module
 type Dep struct {
-	sys   string
-	build string
-	php   string
-	pecl  string
-	npm   string
+	sys   []string
+	build []string
+	php   []string
+	pecl  []string
+	npm   []string
 }
 
 // Deps holds a list of deps to be installed
@@ -22,22 +22,28 @@ func (ds Deps) Expand() string {
 	var sys, php, build, pecl, npm []string
 
 	for _, d := range ds {
-		if d.sys != "" {
-			sys = append(sys, d.sys)
+		if len(d.sys) != 0 {
+			sys = append(sys, d.sys...)
 		}
-		if d.php != "" {
-			php = append(php, d.php)
+		if len(d.php) != 0 {
+			php = append(php, d.php...)
 		}
-		if d.build != "" {
-			build = append(build, d.build)
+		if len(d.build) != 0 {
+			build = append(build, d.build...)
 		}
-		if d.pecl != "" {
-			pecl = append(pecl, d.pecl)
+		if len(d.pecl) != 0 {
+			pecl = append(pecl, d.pecl...)
 		}
-		if d.npm != "" {
-			npm = append(npm, d.npm)
+		if len(d.npm) != 0 {
+			npm = append(npm, d.npm...)
 		}
 	}
+
+	sys = dedup(sys)
+	php = dedup(php)
+	build = dedup(build)
+	pecl = dedup(pecl)
+	npm = dedup(npm)
 
 	var cmd []string
 	var sysCmd, phpCmd, buildCmd, peclCmd, npmCmd string
@@ -88,4 +94,16 @@ func ParseDeps(vs []string) (Deps, error) {
 	}
 
 	return deps, nil
+}
+
+func dedup(vs []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, entry := range vs {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }
