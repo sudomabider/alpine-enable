@@ -12,7 +12,7 @@ var reqs = map[string]Dep{
 		php: []string{"soap"},
 	},
 	"zip": Dep{
-		sys: []string{"zlib-dev libzip-dev"},
+		sys: []string{"zlib-dev", "libzip-dev"},
 		php: []string{"zip"},
 	},
 	"mysql": Dep{

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -17,63 +18,79 @@ type Dep struct {
 // Deps holds a list of deps to be installed
 type Deps map[string]Dep
 
-// Expand the Deps into executable shell command
-func (ds Deps) Expand() string {
-	var sys, php, build, pecl, npm []string
+// Command holds the build parts of the final command
+type Command struct {
+	sys   []string
+	build []string
+	php   []string
+	pecl  []string
+	npm   []string
+}
+
+func (ds Deps) buildCmd() Command {
+	c := Command{}
 
 	for _, d := range ds {
 		if len(d.sys) != 0 {
-			sys = append(sys, d.sys...)
+			c.sys = append(c.sys, d.sys...)
 		}
 		if len(d.php) != 0 {
-			php = append(php, d.php...)
+			c.php = append(c.php, d.php...)
 		}
 		if len(d.build) != 0 {
-			build = append(build, d.build...)
+			c.build = append(c.build, d.build...)
 		}
 		if len(d.pecl) != 0 {
-			pecl = append(pecl, d.pecl...)
+			c.pecl = append(c.pecl, d.pecl...)
 		}
 		if len(d.npm) != 0 {
-			npm = append(npm, d.npm...)
+			c.npm = append(c.npm, d.npm...)
 		}
 	}
 
-	sys = dedup(sys)
-	php = dedup(php)
-	build = dedup(build)
-	pecl = dedup(pecl)
-	npm = dedup(npm)
+	c.sys = refine(c.sys)
+	c.php = refine(c.php)
+	c.build = refine(c.build)
+	c.pecl = refine(c.pecl)
+	c.npm = refine(c.npm)
+
+	return c
+}
+
+// Expand the Deps into executable shell command
+func (ds Deps) Expand() string {
+	c := ds.buildCmd()
 
 	var cmd []string
 	var sysCmd, phpCmd, buildCmd, peclCmd, npmCmd string
 
-	if len(sys) > 0 {
-		sysCmd = "apk add --no-cache " + strings.Join(sys, " ")
+	if len(c.sys) > 0 {
+		sysCmd = "apk add --no-cache " + strings.Join(c.sys, " ")
 		cmd = append(cmd, sysCmd)
 	}
 
-	if len(build) > 0 {
-		buildCmd = "apk add --no-cache --virtual .build " + strings.Join(build, " ")
+	if len(c.build) > 0 {
+		buildCmd = "apk add --no-cache --virtual .build " + strings.Join(c.build, " ")
 		cmd = append(cmd, buildCmd)
 	}
 
-	if len(pecl) > 0 {
-		peclCmd = fmt.Sprintf("pecl install %s && docker-php-ext-enable %s", strings.Join(pecl, " "), strings.Join(pecl, " "))
+	if len(c.pecl) > 0 {
+		pecl := strings.Join(c.pecl, " ")
+		peclCmd = fmt.Sprintf("pecl install %s && docker-php-ext-enable %s", pecl, pecl)
 		cmd = append(cmd, peclCmd)
 	}
 
-	if len(php) > 0 {
-		phpCmd = "docker-php-ext-install " + strings.Join(php, " ")
+	if len(c.php) > 0 {
+		phpCmd = "docker-php-ext-install " + strings.Join(c.php, " ")
 		cmd = append(cmd, phpCmd)
 	}
 
-	if len(npm) > 0 {
-		npmCmd = "npm i -g " + strings.Join(npm, " ")
+	if len(c.npm) > 0 {
+		npmCmd = "npm i -g " + strings.Join(c.npm, " ")
 		cmd = append(cmd, npmCmd)
 	}
 
-	if len(build) > 0 {
+	if len(c.build) > 0 {
 		cmd = append(cmd, "apk del .build")
 	}
 
@@ -96,7 +113,7 @@ func ParseDeps(vs []string) (Deps, error) {
 	return deps, nil
 }
 
-func dedup(vs []string) []string {
+func refine(vs []string) []string {
 	keys := make(map[string]bool)
 	list := []string{}
 	for _, entry := range vs {
@@ -105,5 +122,8 @@ func dedup(vs []string) []string {
 			list = append(list, entry)
 		}
 	}
+
+	sort.Strings(list)
+
 	return list
 }
