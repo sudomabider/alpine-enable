@@ -32,7 +32,7 @@ var reqs = map[string]Dep{
 		pecl:  []string{"xdebug"},
 	},
 	"pm2": Dep{
-		sys: []string{"nodejs"},
+		sys: []string{"nodejs", "npm"},
 		npm: []string{"pm2"},
 	},
 }
