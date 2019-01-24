@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"log"
 	"os"
@@ -62,36 +61,11 @@ func do(c *cli.Context) error {
 func execCmd(cmdStr string) error {
 	cmd := exec.Command("sh", "-c", cmdStr)
 
-	cmdReaderStd, err := cmd.StdoutPipe()
-	if err != nil {
-		return err
-	}
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 
-	scannerStd := bufio.NewScanner(cmdReaderStd)
-	go func() {
-		for scannerStd.Scan() {
-			fmt.Printf("output | %s\n", scannerStd.Text())
-		}
-	}()
-
-	cmdReaderErr, err := cmd.StderrPipe()
-	if err != nil {
-		return err
-	}
-
-	scannerErr := bufio.NewScanner(cmdReaderErr)
-	go func() {
-		for scannerErr.Scan() {
-			fmt.Printf("error | %s\n", scannerErr.Text())
-		}
-	}()
-
-	err = cmd.Start()
-	if err != nil {
-		return err
-	}
-
-	err = cmd.Wait()
+	err := cmd.Run()
 	if err != nil {
 		return err
 	}
