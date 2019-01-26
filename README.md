@@ -1,16 +1,12 @@
 ```
-$ ./enable
+$ enable -h
 
-NAME:
-   Alpine enable - easily enable [zip,mysql,postgres,swoole,pm2,git,crux,soap]
+Supported arguments: [git mysql postgres xdebug crux soap zip swoole pm2]
 
-USAGE:
-   enable [global options] [arguments...]
+Options:
+  -d    Print the full command but not execute
 
-VERSION:
-   0.0.0
+$ enable -d zip soap postgres swoole
 
-GLOBAL OPTIONS:
-   --dry, -d      print the full command but not execute
-   --version, -v  print the version
+Command [apk add --no-cache libxml2-dev libzip-dev postgresql-dev zlib-dev && apk add --no-cache --virtual .build $PHPIZE_DEPS && pecl install swoole && docker-php-ext-enable swoole && docker-php-ext-install pcntl pdo_pgsql soap zip && apk del .build]
 ```
