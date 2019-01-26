@@ -1,61 +1,50 @@
 package main
 
 import (
+	"errors"
+	"flag"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
-	"strings"
-
-	"github.com/urfave/cli"
 )
 
+var dry bool
+
 func main() {
-	app := cli.NewApp()
-	app.Name = "Alpine enable"
-	app.Usage = fmt.Sprintf("easily enable [%s]", strings.Join(SupportedModules(), ","))
-	app.Version = "0.0.0"
-	app.Flags = []cli.Flag{
-		cli.BoolFlag{
-			Name:   "dry, d",
-			Hidden: false,
-			Usage:  "print the full command but not execute",
-		},
+	flag.BoolVar(&dry, "d", false, "Print the full command but not execute")
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stdout, "Supported arguments: %v\n", SupportedModules())
+		fmt.Fprintln(os.Stdout, "")
+		fmt.Fprintln(os.Stdout, "Options:")
+		flag.PrintDefaults()
 	}
-	app.HideHelp = true
-	app.Action = do
+	flag.Parse()
 
-	err := app.Run(os.Args)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func do(c *cli.Context) error {
-	args := c.Args()
+	args := flag.Args()
 	if len(args) == 0 {
-		cli.ShowAppHelp(c)
-		return nil
+		handleError(errors.New("No modules provided"))
 	}
 
 	deps, err := ParseDeps(args)
-	if err != nil {
-		return err
-	}
+	handleError(err)
 
 	cmdStr := deps.Expand()
 
-	fmt.Println("Command: " + cmdStr)
-	if c.Bool("dry") {
-		return nil
+	fmt.Printf("Command [%s]\n", cmdStr)
+	if dry {
+		os.Exit(0)
 	}
 
+	fmt.Println("")
 	err = execCmd(cmdStr)
-	if err != nil {
-		return err
-	}
+	handleError(err)
+}
 
-	return nil
+func handleError(err error) {
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
+		os.Exit(1)
+	}
 }
 
 func execCmd(cmdStr string) error {
@@ -65,10 +54,5 @@ func execCmd(cmdStr string) error {
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 
-	err := cmd.Run()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return cmd.Run()
 }
