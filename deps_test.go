@@ -22,7 +22,7 @@ func TestExpand(t *testing.T) {
 	expected := Command{
 		sys:   []string{"git", "libxml2-dev", "libzip-dev", "mysql-client", "nodejs", "npm", "openssh-client", "postgresql-dev", "zlib-dev"},
 		build: []string{"$PHPIZE_DEPS"},
-		php:   []string{"bcmath", "pdo_mysql", "pdo_pgsql", "soap", "sockets", "zip"},
+		php:   []string{"bcmath", "pcntl", "pdo_mysql", "pdo_pgsql", "soap", "sockets", "zip"},
 		pecl:  []string{"swoole"},
 		npm:   []string{"pm2"},
 	}

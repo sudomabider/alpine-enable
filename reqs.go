@@ -25,6 +25,7 @@ var reqs = map[string]Dep{
 	},
 	"swoole": Dep{
 		build: []string{"$PHPIZE_DEPS"},
+		php:   []string{"pcntl"},
 		pecl:  []string{"swoole"},
 	},
 	"xdebug": Dep{
