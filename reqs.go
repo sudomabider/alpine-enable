@@ -32,6 +32,10 @@ var reqs = map[string]Dep{
 		build: []string{"$PHPIZE_DEPS"},
 		pecl:  []string{"xdebug"},
 	},
+	"pcov": Dep{
+		build: []string{"$PHPIZE_DEPS"},
+		pecl:  []string{"pcov"},
+	},
 	"pm2": Dep{
 		sys: []string{"nodejs", "npm"},
 		npm: []string{"pm2"},
