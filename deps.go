@@ -62,7 +62,7 @@ func (ds Deps) Expand() string {
 	c := ds.buildCmd()
 
 	var cmd []string
-	var sysCmd, phpCmd, buildCmd, peclCmd, npmCmd string
+	var sysCmd, phpCmd, buildCmd, peclCmd, packageVersion, npmCmd string
 
 	if len(c.sys) > 0 {
 		sysCmd = "apk add --no-cache " + strings.Join(c.sys, " ")
@@ -76,7 +76,14 @@ func (ds Deps) Expand() string {
 
 	if len(c.pecl) > 0 {
 		pecl := strings.Join(c.pecl, " ")
-		peclCmd = fmt.Sprintf("pecl install %s && docker-php-ext-enable %s", pecl, pecl)
+
+        packageVersion = pecl;
+
+		if (version != "") {
+            packageVersion = fmt.Sprintf("%s-%s", pecl, version);
+        }
+
+		peclCmd = fmt.Sprintf("pecl install %s && docker-php-ext-enable %s", packageVersion, pecl)
 		cmd = append(cmd, peclCmd)
 	}
 

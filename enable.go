@@ -9,9 +9,12 @@ import (
 )
 
 var dry bool
+var version string
 
 func main() {
 	flag.BoolVar(&dry, "d", false, "Print the full command but not execute")
+	flag.StringVar(&version, "version", "", "Specific package version to enable")
+
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stdout, "Supported arguments: %v\n", SupportedModules())
 		fmt.Fprintln(os.Stdout, "")
