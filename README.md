@@ -1,10 +1,14 @@
 ```
 $ enable -h
 
-Supported arguments: [git mysql postgres xdebug crux soap zip swoole pm2]
+Usage: enable OPTIONS [args...]
 
 Options:
-  -d    Print the full command but not execute
+        -version|v         Print version
+        -help|h            Print usage
+        -dry|d                 Print the command but not execute
+
+args: [zip xdebug git crux soap pcov pm2 mysql postgres swoole]
 
 $ enable -d zip soap postgres swoole
 
