@@ -14,9 +14,9 @@ const (
 	usage   = `Usage: enable OPTIONS [args...]
 
 Options:
-	-version|v         Print version
-	-help|h            Print usage
-	-dry|d	  	       Print the command but not execute
+  --version|-v      Print version
+  --help|-h         Print usage
+  --dry|-d          Print the command but not execute
 
 args: [%s]`
 )
