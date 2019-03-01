@@ -10,8 +10,7 @@ import (
 )
 
 const (
-	version = "v0.3.1"
-	usage   = `Usage: enable OPTIONS [args...]
+	usage = `Usage: enable OPTIONS [args...]
 
 Options:
   --version|-v      Print version
@@ -20,6 +19,10 @@ Options:
 
 args: [%s]`
 )
+
+var version string
+var buildTime string
+var commitHash string
 
 var dryFlag bool
 var versionFlag bool
@@ -49,7 +52,7 @@ func Run(recipe Recipe) {
 	flag.Parse()
 
 	if versionFlag {
-		fmt.Fprintln(os.Stderr, version)
+		fmt.Fprintf(os.Stderr, "Version: %s\nBuilt time: %s\nCommit hash: %s\n", version, buildTime, commitHash)
 		os.Exit(0)
 	}
 

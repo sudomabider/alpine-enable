@@ -4,9 +4,9 @@ $ enable -h
 Usage: enable OPTIONS [args...]
 
 Options:
-        -version|v         Print version
-        -help|h            Print usage
-        -dry|d                 Print the command but not execute
+    -version|v         Print version
+    -help|h            Print usage
+    -dry|d             Print the command but not execute
 
 args: [zip xdebug git crux soap pcov pm2 mysql postgres swoole]
 
