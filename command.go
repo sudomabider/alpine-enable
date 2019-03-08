@@ -8,6 +8,8 @@ import (
 )
 
 type command struct {
+	pre         []string
+	post        []string
 	system      []string
 	build       []string
 	phpInstall  []string
@@ -31,6 +33,14 @@ func (c *command) addDep(d dep) error {
 
 	if d.version != "" && len(npm) == 1 {
 		npm[0] = fmt.Sprintf("%s@%s", npm[0], d.version)
+	}
+
+	if d.pre != "" {
+		c.pre = append(c.pre, d.pre)
+	}
+
+	if d.post != "" {
+		c.post = append(c.post, d.post)
 	}
 
 	c.system = append(c.system, d.system...)
@@ -70,6 +80,10 @@ func dedupAndSort(vs []string) []string {
 func (c command) expand() string {
 	var result []string
 
+	if len(c.pre) > 0 {
+		result = append(result, strings.Join(c.pre, " && "))
+	}
+
 	if len(c.system) > 0 {
 		result = append(result, "apk add --no-cache "+strings.Join(c.system, " "))
 	}
@@ -94,9 +108,13 @@ func (c command) expand() string {
 		result = append(result, "npm i -g "+strings.Join(c.npmInstall, " "))
 	}
 
+	if len(c.post) > 0 {
+		result = append(result, strings.Join(c.post, " && "))
+	}
+
 	if len(c.build) > 0 {
 		result = append(result, "apk del .build")
 	}
 
-	return strings.Join(result, " && ")
+	return strings.Join(result, " && \\\n")
 }
