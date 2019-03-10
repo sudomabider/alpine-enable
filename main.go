@@ -71,11 +71,11 @@ func Run(recipe Recipe) {
 	cmdStr := c.expand()
 
 	if dryFlag {
-		fmt.Fprintf(os.Stderr, "Command [%s]", cmdStr)
+		fmt.Fprintf(os.Stderr, "[Command]\n%s\n", cmdStr)
 		os.Exit(0)
 	}
 
-	fmt.Printf("Command [%s]\n", cmdStr)
+	fmt.Printf("[Command]\n%s\n", cmdStr)
 	fmt.Println("")
 
 	execCmd(cmdStr)

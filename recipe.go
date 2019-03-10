@@ -34,6 +34,11 @@ var recipe = Recipe{
 	"xdebug": dep{
 		build: []string{"$PHPIZE_DEPS"},
 		pecl:  []string{"xdebug"},
+		post: `xdebug_ini=$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini && \
+echo "xdebug.remote_port=9000" >> ${xdebug_ini} && \
+echo "xdebug.remote_enable=1" >> ${xdebug_ini} && \
+echo "xdebug.remote_autostart=1" >> ${xdebug_ini} && \
+echo "xdebug.remote_host=${XDEBUG_REMOTE_HOST:-host.docker.internal}" >> ${xdebug_ini}`,
 	},
 	"pcov": dep{
 		build: []string{"$PHPIZE_DEPS"},
