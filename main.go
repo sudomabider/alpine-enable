@@ -99,7 +99,7 @@ func parseArgs(args []string, recipe Recipe) (command, error) {
 
 		dep, ok := recipe[name]
 		if !ok {
-			return command{}, fmt.Errorf("[%s] is not recogized", name)
+			return command{}, fmt.Errorf("[%s] is not recogized\nIf you want this module supported, please create an issue at https://gitlab.vygr.net/dev/tooling/enable/issues", name)
 		}
 
 		dep.version = version
