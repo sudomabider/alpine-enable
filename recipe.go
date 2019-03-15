@@ -24,7 +24,7 @@ var recipe = Recipe{
 	},
 	"postgres": dep{
 		system: []string{"postgresql-dev"},
-		php:    []string{"pdo_pgsql"},
+		php:    []string{"pgsql", "pdo_pgsql"},
 	},
 	"swoole": dep{
 		build: []string{"$PHPIZE_DEPS"},

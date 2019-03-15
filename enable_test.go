@@ -72,7 +72,7 @@ func TestExpand(t *testing.T) {
 	expected := command{
 		system:      []string{"git", "libxml2-dev", "libzip-dev", "mysql-client", "nodejs", "npm", "openssh-client", "postgresql-dev", "zlib-dev"},
 		build:       []string{"$PHPIZE_DEPS"},
-		phpInstall:  []string{"bcmath", "pcntl", "pdo_mysql", "pdo_pgsql", "soap", "sockets", "zip"},
+		phpInstall:  []string{"bcmath", "pcntl", "pdo_mysql", "pdo_pgsql", "pgsql", "soap", "sockets", "zip"},
 		peclInstall: []string{"swoole"},
 		phpEnable:   []string{"swoole"},
 		npmInstall:  []string{"pm2"},
