@@ -48,4 +48,8 @@ echo "xdebug.remote_host=${XDEBUG_REMOTE_HOST:-host.docker.internal}" >> ${xdebu
 		system: []string{"nodejs", "npm"},
 		npm:    []string{"pm2"},
 	},
+	"xsl": dep{
+		system: []string{"libxslt-dev"},
+		php:    []string{"xsl"},
+	},
 }
