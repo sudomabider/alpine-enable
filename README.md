@@ -17,6 +17,6 @@ apk add --no-cache libxml2-dev libzip-dev postgresql-dev zlib-dev && \
 apk add --no-cache --virtual .build $PHPIZE_DEPS && \
 pecl install swoole && \
 docker-php-ext-enable swoole && \
-docker-php-ext-install pcntl pdo_pgsql soap zip && \
+docker-php-ext-install pcntl pdo_pgsql pgsql soap zip && \
 apk del .build
 ```
