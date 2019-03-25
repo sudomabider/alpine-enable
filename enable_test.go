@@ -63,7 +63,7 @@ func TestVersionIsIgnoredForUnversionableDeps(t *testing.T) {
 }
 
 func TestExpand(t *testing.T) {
-	c, err := parseArgs([]string{"git", "postgres", "mysql", "zip", "soap", "crux", "swoole", "pm2", "cpp"}, recipe)
+	c, err := parseArgs([]string{"git", "postgres", "mysql", "zip", "soap", "crux", "swoole", "pm2", "mcrypt"}, recipe)
 
 	if err != nil {
 		t.Errorf("Expected no error; got %s", err.Error())
@@ -93,7 +93,7 @@ func TestExpandWithVersion(t *testing.T) {
 	expected := command{
 		system:      []string{"git", "libzip-dev", "mysql-client", "nodejs", "npm", "openssh-client", "zlib-dev"},
 		build:       []string{"$PHPIZE_DEPS"},
-		phpInstall:  []string{"pcntl", "pdo_mysql", "zip"},
+		phpInstall:  []string{"mysql", "pcntl", "pdo_mysql", "zip"},
 		peclInstall: []string{"swoole-1.1"},
 		phpEnable:   []string{"swoole"},
 		npmInstall:  []string{"pm2@2.2"},
