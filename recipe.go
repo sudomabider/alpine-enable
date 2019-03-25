@@ -52,4 +52,8 @@ echo "xdebug.remote_host=${XDEBUG_REMOTE_HOST:-host.docker.internal}" >> ${xdebu
 		system: []string{"libxslt-dev"},
 		php:    []string{"xsl"},
 	},
+	"cpp": dep{
+		system: []string{"libmcrypt-dev", "libltdl"},
+		php:    []string{"mcrypt", "mysql"},
+	},
 }
