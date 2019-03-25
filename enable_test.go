@@ -63,16 +63,16 @@ func TestVersionIsIgnoredForUnversionableDeps(t *testing.T) {
 }
 
 func TestExpand(t *testing.T) {
-	c, err := parseArgs([]string{"git", "postgres", "mysql", "zip", "soap", "crux", "swoole", "pm2"}, recipe)
+	c, err := parseArgs([]string{"git", "postgres", "mysql", "zip", "soap", "crux", "swoole", "pm2", "mcrypt"}, recipe)
 
 	if err != nil {
 		t.Errorf("Expected no error; got %s", err.Error())
 	}
 
 	expected := command{
-		system:      []string{"git", "libxml2-dev", "libzip-dev", "mysql-client", "nodejs", "npm", "openssh-client", "postgresql-dev", "zlib-dev"},
+		system:      []string{"git", "libmcrypt-dev", "libxml2-dev", "libzip-dev", "mysql-client", "nodejs", "npm", "openssh-client", "postgresql-dev", "zlib-dev"},
 		build:       []string{"$PHPIZE_DEPS"},
-		phpInstall:  []string{"bcmath", "pcntl", "pdo_mysql", "pdo_pgsql", "pgsql", "soap", "sockets", "zip"},
+		phpInstall:  []string{"bcmath", "mcrypt", "mysql", "pcntl", "pdo_mysql", "pdo_pgsql", "pgsql", "soap", "sockets", "zip"},
 		peclInstall: []string{"swoole"},
 		phpEnable:   []string{"swoole"},
 		npmInstall:  []string{"pm2"},
@@ -93,7 +93,7 @@ func TestExpandWithVersion(t *testing.T) {
 	expected := command{
 		system:      []string{"git", "libzip-dev", "mysql-client", "nodejs", "npm", "openssh-client", "zlib-dev"},
 		build:       []string{"$PHPIZE_DEPS"},
-		phpInstall:  []string{"pcntl", "pdo_mysql", "zip"},
+		phpInstall:  []string{"mysql", "pcntl", "pdo_mysql", "zip"},
 		peclInstall: []string{"swoole-1.1"},
 		phpEnable:   []string{"swoole"},
 		npmInstall:  []string{"pm2@2.2"},

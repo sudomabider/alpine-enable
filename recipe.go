@@ -20,7 +20,7 @@ var recipe = Recipe{
 	},
 	"mysql": dep{
 		system: []string{"mysql-client"},
-		php:    []string{"pdo_mysql"},
+		php:    []string{"pdo_mysql", "mysql"},
 	},
 	"postgres": dep{
 		system: []string{"postgresql-dev"},
@@ -51,5 +51,9 @@ echo "xdebug.remote_host=${XDEBUG_REMOTE_HOST:-host.docker.internal}" >> ${xdebu
 	"xsl": dep{
 		system: []string{"libxslt-dev"},
 		php:    []string{"xsl"},
+	},
+	"mcrypt": dep{
+		system: []string{"libmcrypt-dev"},
+		php:    []string{"mcrypt"},
 	},
 }
