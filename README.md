@@ -8,7 +8,7 @@ Options:
     -help|h            Print usage
     -dry|d             Print the command but not execute
 
-args: [pm2 xsl git soap mysql postgres pcov crux zip swoole xdebug mcrypt]
+args: [git crux soap mysql swoole xdebug pm2 xsl mcrypt zip postgres pcov]
 
 $ enable -d zip soap postgres swoole
 
