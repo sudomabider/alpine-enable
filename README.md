@@ -1,3 +1,7 @@
+The `enable` binary allows one to easily install the most common functionalities via `enable`able modules, e.g. `mysql` and `zip`
+
+_NOTE_: there's currently a `php-5` version and a `php-7` version for the php 5 and php 7 images respectively. Check the corresponding branches for more details.
+
 ```
 $ enable -h
 
