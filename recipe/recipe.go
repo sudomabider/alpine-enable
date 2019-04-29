@@ -1,4 +1,4 @@
-package main
+package recipe
 
 // Recipe defines how a module should be enabled
 type Recipe map[string]dep
