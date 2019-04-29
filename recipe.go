@@ -56,4 +56,16 @@ echo "xdebug.remote_host=${XDEBUG_REMOTE_HOST:-host.docker.internal}" >> ${xdebu
 		system: []string{"libmcrypt-dev"},
 		php:    []string{"mcrypt"},
 	},
+    "gd": dep{
+        system: []string{"libpng-dev"},
+        php:    []string{"gd"},
+    },
+    "imap": dep{
+        system: []string{"imap-dev"},
+        php:    []string{"imap"},
+    },
+    "xmlrpc": dep{
+        system: []string{"libxml2-dev"},
+        php:    []string{"xmlrpc"},
+    },
 }
