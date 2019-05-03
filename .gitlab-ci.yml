@@ -27,12 +27,36 @@ Build:
   script:
     - ./scripts/build.sh
   artifacts:
-    expire_in: 10 mins
+    expire_in: 30 mins
     paths:
       - binaries/enable
 
 PHP 7.2 Test:
-  image: gitlab.vygr.net:5005/dev/docker/alpine/php-7.2-nginx:latest
+  image: gitlab.vygr.net:5005/dev/docker/alpine/php-7.2
+  stage: integration
+  dependencies:
+    - Build
+  only:
+    - master
+  tags:
+    - docker-builder
+  script:
+    - binaries/enable -a
+
+PHP 7.3 Test:
+  image: gitlab.vygr.net:5005/dev/docker/alpine/php-7.3
+  stage: integration
+  dependencies:
+    - Build
+  only:
+    - master
+  tags:
+    - docker-builder
+  script:
+    - binaries/enable -a
+
+PHP 5.6 Test:
+  image: gitlab.vygr.net:5005/dev/docker/alpine/php-5.6
   stage: integration
   dependencies:
     - Build
