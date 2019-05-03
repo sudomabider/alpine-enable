@@ -71,6 +71,18 @@ var php7Recipe = Recipe{
         System: []string{"postgresql-dev"},
         Php:    []string{"pdo_pgsql"},
     },
+    "gd": Def{
+        System: []string{"libpng-dev"},
+        Php:    []string{"gd"},
+    },
+    "imap": Def{
+        System: []string{"imap-dev"},
+        Php:    []string{"imap"},
+    },
+    "xmlrpc": Def{
+        System: []string{"libxml2-dev"},
+        Php:    []string{"xmlrpc"},
+    },
 }
 
 func combine(rs ...Recipe) Recipe {
@@ -85,21 +97,13 @@ func combine(rs ...Recipe) Recipe {
     return combined
 }
 
-func getPHP5Recipe() Recipe {
-    return combine(baseRecipe, php5Recipe)
-}
-
-func getPHP7Recipe() Recipe {
-    return combine(baseRecipe, php7Recipe)
-}
-
 func GetPHPRecipe(ver string) (Recipe, error) {
     if ver == "7" {
-        return getPHP7Recipe(), nil
+        return combine(baseRecipe, php7Recipe), nil
     }
 
     if ver == "5" {
-        return getPHP5Recipe(), nil
+        return combine(baseRecipe, php5Recipe), nil
     }
 
     return Recipe{}, fmt.Errorf("no recipes are found for PHP version [%s]", ver)

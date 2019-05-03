@@ -1,5 +1,7 @@
 package recipe
 
+import "sort"
+
 // Def is the definition of how a module should be enabled
 type Def struct {
     Pre     string
@@ -21,5 +23,6 @@ func (r Recipe) Modules() []string {
         mods = append(mods, k)
     }
 
+    sort.Strings(mods)
     return mods
 }

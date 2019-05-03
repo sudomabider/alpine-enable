@@ -11,7 +11,7 @@ Unit Test:
   tags:
     - docker-builder
   script:
-    - go test ./...
+    - go test ./...--cover
 
 Build Binary:
   image: golang:1.12-alpine
@@ -28,7 +28,7 @@ Build Binary:
   artifacts:
     expire_in: 30 mins
     paths:
-      - binaries/enable
+      - bin/enable
 
 PHP 7.2 Test:
   image: gitlab.vygr.net:5005/dev/docker/alpine/php-7.2
@@ -40,7 +40,7 @@ PHP 7.2 Test:
   tags:
     - docker-builder
   script:
-    - binaries/enable -a
+    - bin/enable -a
 
 PHP 7.3 Test:
   image: gitlab.vygr.net:5005/dev/docker/alpine/php-7.3
@@ -52,7 +52,7 @@ PHP 7.3 Test:
   tags:
     - docker-builder
   script:
-    - binaries/enable -a
+    - bin/enable -a
 
 PHP 5.6 Test:
   image: gitlab.vygr.net:5005/dev/docker/alpine/php-5.6
@@ -64,7 +64,7 @@ PHP 5.6 Test:
   tags:
     - docker-builder
   script:
-    - binaries/enable -a
+    - bin/enable -a
 
 Build Image:
   image: gitlab.vygr.net:5005/dev/docker/ci
@@ -76,7 +76,7 @@ Build Image:
   before_script:
     - docker_ci login
   script:
-    - docker build --file Dockerfile --tag ${CI_REGISTRY_IMAGE} binaries
+    - docker build --file Dockerfile --tag ${CI_REGISTRY_IMAGE} bin
     - docker push ${CI_REGISTRY_IMAGE}
   after_script:
     - docker_ci logout
