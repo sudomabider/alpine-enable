@@ -1,5 +1,6 @@
 stages:
   - test
+  - build
   - integration
   - release
 
@@ -15,7 +16,7 @@ Unit Test:
 
 Build Binary:
   image: golang:1.12-alpine
-  stage: test
+  stage: build
   only:
     - master
   tags:
@@ -30,8 +31,7 @@ Build Binary:
     paths:
       - bin/enable
 
-PHP 7.2 Test:
-  image: gitlab.vygr.net:5005/dev/docker/alpine/php-7.2
+.integration_template: &integration
   stage: integration
   dependencies:
     - Build Binary
@@ -42,29 +42,18 @@ PHP 7.2 Test:
   script:
     - bin/enable -a
 
+
+PHP 7.2 Test:
+  <<: *integration
+  image: gitlab.vygr.net:5005/dev/docker/alpine/php-7.2
+
 PHP 7.3 Test:
+  <<: *integration
   image: gitlab.vygr.net:5005/dev/docker/alpine/php-7.3
-  stage: integration
-  dependencies:
-    - Build
-  only:
-    - master
-  tags:
-    - docker-builder
-  script:
-    - bin/enable -a
 
 PHP 5.6 Test:
+  <<: *integration
   image: gitlab.vygr.net:5005/dev/docker/alpine/php-5.6
-  stage: integration
-  dependencies:
-    - Build
-  only:
-    - master
-  tags:
-    - docker-builder
-  script:
-    - bin/enable -a
 
 Build Image:
   image: gitlab.vygr.net:5005/dev/docker/ci
