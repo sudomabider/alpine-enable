@@ -12,7 +12,7 @@ Unit Test:
   tags:
     - docker-builder
   script:
-    - go test ./...--cover
+    - go test ./... --cover
 
 Build Binary:
   image: golang:1.12-alpine
@@ -58,6 +58,8 @@ PHP 5.6 Test:
 Build Image:
   image: gitlab.vygr.net:5005/dev/docker/ci
   stage: release
+  dependencies:
+    - Build Binary
   only:
     - master
   tags:
