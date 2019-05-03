@@ -1,6 +1,5 @@
 stages:
   - test
-  - build
   - integration
   - release
 
@@ -8,15 +7,15 @@ Unit Test:
   image: golang:1.12-alpine
   stage: test
   only:
-    - develop
+    - master
   tags:
     - docker-builder
   script:
     - go test ./...
 
-Build:
+Build Binary:
   image: golang:1.12-alpine
-  stage: build
+  stage: test
   only:
     - master
   tags:
@@ -35,7 +34,7 @@ PHP 7.2 Test:
   image: gitlab.vygr.net:5005/dev/docker/alpine/php-7.2
   stage: integration
   dependencies:
-    - Build
+    - Build Binary
   only:
     - master
   tags:
@@ -66,3 +65,18 @@ PHP 5.6 Test:
     - docker-builder
   script:
     - binaries/enable -a
+
+Build Image:
+  image: gitlab.vygr.net:5005/dev/docker/ci
+  stage: release
+  only:
+    - master
+  tags:
+    - docker-builder
+  before_script:
+    - docker_ci login
+  script:
+    - docker build --file Dockerfile --tag ${CI_REGISTRY_IMAGE} binaries
+    - docker push ${CI_REGISTRY_IMAGE}
+  after_script:
+    - docker_ci logout
