@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - integration
   - release
 
 Unit Test:
@@ -32,7 +33,7 @@ Build:
 
 PHP 7.2 Test:
   image: gitlab.vygr.net:5005/dev/docker/alpine/php-7.2-nginx:latest
-  stage: test
+  stage: integration
   dependencies:
     - Build
   only:
