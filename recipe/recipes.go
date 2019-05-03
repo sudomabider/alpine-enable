@@ -19,11 +19,6 @@ var baseRecipe = Recipe{
 		System: []string{"zlib-dev", "libzip-dev"},
 		Php:    []string{"zip"},
 	},
-	"swoole": Def{
-		Build: []string{"$PHPIZE_DEPS"},
-		Php:   []string{"pcntl"},
-		Pecl:  []string{"swoole"},
-	},
 	"xdebug": Def{
 		Build: []string{"$PHPIZE_DEPS"},
 		Pecl:  []string{"xdebug"},
@@ -32,10 +27,6 @@ echo "xdebug.remote_port=9000" >> ${xdebug_ini} && \
 echo "xdebug.remote_enable=1" >> ${xdebug_ini} && \
 echo "xdebug.remote_autostart=1" >> ${xdebug_ini} && \
 echo "xdebug.remote_host=${XDEBUG_REMOTE_HOST:-host.docker.internal}" >> ${xdebug_ini}`,
-	},
-	"pcov": Def{
-		Build: []string{"$PHPIZE_DEPS"},
-		Pecl:  []string{"pcov"},
 	},
 	"pm2": Def{
 		System: []string{"nodejs", "npm"},
@@ -60,6 +51,16 @@ var php5Recipe = Recipe{
         System: []string{"libmcrypt-dev"},
         Php:    []string{"mcrypt"},
     },
+    "xdebug": Def{
+        Build: []string{"$PHPIZE_DEPS"},
+        Pecl:  []string{"xdebug"},
+        Post: `xdebug_ini=$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini && \
+echo "xdebug.remote_port=9000" >> ${xdebug_ini} && \
+echo "xdebug.remote_enable=1" >> ${xdebug_ini} && \
+echo "xdebug.remote_autostart=1" >> ${xdebug_ini} && \
+echo "xdebug.remote_host=${XDEBUG_REMOTE_HOST:-host.docker.internal}" >> ${xdebug_ini}`,
+        Version: "2.5.5",
+    },
 }
 
 var php7Recipe = Recipe{
@@ -71,6 +72,10 @@ var php7Recipe = Recipe{
         System: []string{"postgresql-dev"},
         Php:    []string{"pdo_pgsql"},
     },
+    "pcov": Def{
+        Build: []string{"$PHPIZE_DEPS"},
+        Pecl:  []string{"pcov"},
+    },
     "gd": Def{
         System: []string{"libpng-dev"},
         Php:    []string{"gd"},
@@ -78,6 +83,11 @@ var php7Recipe = Recipe{
     "imap": Def{
         System: []string{"imap-dev"},
         Php:    []string{"imap"},
+    },
+    "swoole": Def{
+        Build: []string{"$PHPIZE_DEPS"},
+        Php:   []string{"pcntl"},
+        Pecl:  []string{"swoole"},
     },
     "xmlrpc": Def{
         System: []string{"libxml2-dev"},

@@ -40,7 +40,10 @@ func NewBuilder(r recipe.Recipe, args []string) (Builder, error) {
             return b, fmt.Errorf("[%s] is invalid or not supported", name)
         }
 
-        m.Version = ver
+        if ver != "" {
+            m.Version = ver
+        }
+
         err := b.Add(m)
         if err != nil {
             return b, err
