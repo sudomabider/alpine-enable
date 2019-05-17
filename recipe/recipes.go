@@ -85,9 +85,9 @@ var php7Recipe = Recipe{
         Php:    []string{"imap"},
     },
     "swoole": Def{
-        Build: []string{"$PHPIZE_DEPS"},
-        Php:   []string{"pcntl"},
-        Pecl:  []string{"swoole"},
+        System: []string{"libstdc++"},
+        Build:  []string{"$PHPIZE_DEPS"},
+        Pecl:   []string{"swoole"},
     },
     "xmlrpc": Def{
         System: []string{"libxml2-dev"},
